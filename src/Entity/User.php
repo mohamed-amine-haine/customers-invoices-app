@@ -17,6 +17,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @ApiResource(
  *  collectionOperations={"get","post"},
+ *  normalizationContext={
+ *      "groups"="users_read"
+ *  },
  *  denormalizationContext={
  *      "disable_type_enforcement"=true
  *  }
@@ -29,13 +32,13 @@ class User implements UserInterface
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"customers_read", "invoices_read", "invoices_subresource_read"})
+     * @Groups({"users_read", "customers_read", "invoices_read", "invoices_subresource_read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
-     * @Groups({"customers_read", "invoices_read", "invoices_subresource_read"})
+     * @Groups({"users_read", "customers_read", "invoices_read", "invoices_subresource_read"})
      * @Assert\NotBlank(message="l'adresse mail du user est obligatoire")
      * @Assert\Email(message="le format de l'adresse email n'est pas valide")
      */
@@ -59,7 +62,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"customers_read", "invoices_read", "invoices_subresource_read"})
+     * @Groups({"users_read", "customers_read", "invoices_read", "invoices_subresource_read"})
      * @Assert\NotBlank(message="le prenom du user est obligatoire")
      * @Assert\Type(type="string", message="le prenom doit etre un string")
      * @Assert\Length(
@@ -76,7 +79,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"customers_read", "invoices_read", "invoices_subresource_read"})
+     * @Groups({"users_read", "customers_read", "invoices_read", "invoices_subresource_read"})
      * @Assert\NotBlank(message="le nom du customer est obligatoire")
      * @Assert\Length(
      *  min=3, minMessage="nom entre 3 et 255 caracteres",
