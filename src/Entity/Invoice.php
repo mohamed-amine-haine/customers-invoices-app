@@ -7,21 +7,21 @@ use ApiPlatform\Core\Annotation\ApiFilter;
 use App\Controller\IncrementInvoiceChrono;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\RangeFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\InvoiceRepository")
  * @ApiResource(
  *  attributes = {
- *      "pagination_enabled" = true,
+ *      "pagination_enabled" = false,
  *      "pagination_items_per_page" = 20,
  *      "order" = {"amount":"asc"}
  *  },
  *  itemOperations={
- *     "get",
+ *     "get", "put", "delete",
  *     "increment_invoice_chrono"={
  *         "method"="post",
  *         "path"="/invoices/{id}/increment",
@@ -151,7 +151,7 @@ class Invoice
      * @Groups({"invoices_read", "invoices_subresource_read"})
      * @return User
      */
-    public function getUser() : User
+    public function getUser(): User
     {
         return $this->customer->getUser();
     }

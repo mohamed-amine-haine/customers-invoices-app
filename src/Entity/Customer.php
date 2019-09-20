@@ -16,7 +16,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity(repositoryClass="App\Repository\CustomerRepository")
  * @ApiResource(
  *  collectionOperations={"get","post"},
- *  itemOperations={"get"},
+ *  itemOperations={"get","put","delete"},
  *  subresourceOperations={
  *      "invoices_get_subresource"={"path"="/customers/{id}/invoices"}    
  *  },
@@ -70,7 +70,7 @@ class Customer
      * @Groups({"customers_read", "invoices_read"})})
      */
     private $company;
-    
+
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Invoice", mappedBy="customer")
      * @Groups({"customers_read"})
