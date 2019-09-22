@@ -67,6 +67,7 @@ const CustomersPage = props => {
 
   return (
     <div>
+      <h2>Liste des clients</h2>
       <div className="form-group">
         <input
           type="text"

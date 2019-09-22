@@ -80,6 +80,7 @@ const InvoicesPage = props => {
 
   return (
     <div>
+      <h2>Liste des factures</h2>
       <div className="form-group">
         <input
           type="text"

@@ -5,13 +5,17 @@
  * (and its CSS file) in your base layout (base.html.twig).
  */
 
-import React from "react";
+import React, { useState } from "react";
 import ReactDom from "react-dom";
 import Navbar from "./composants/Navbar";
 import HomePage from "./pages/HomePage";
-import { HashRouter, Switch, Route } from "react-router-dom";
+import { HashRouter, Switch, Route, withRouter } from "react-router-dom";
 import CustomersPage from "./pages/CustomersPage";
 import InvoicesPage from "./pages/InvoicesPage";
+import LoginPage from "./pages/LoginPage";
+import PrivateRoute from "./composants/PrivateRoute";
+import AuthAPI from "./services/AuthAPI";
+import AuthContext from "./contexts/AuthContext";
 
 // any CSS you require will output into a single css file (app.css in this case)
 require("../css/app.css");
@@ -21,18 +25,29 @@ require("../css/app.css");
 
 console.log("Hello Webpack Encore!");
 
+AuthAPI.setup();
+
 const App = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState(
+    AuthAPI.isAuthenticated()
+  );
+
+  const NavBarWithRouter = withRouter(Navbar);
+
   return (
-    <HashRouter>
-      <Navbar />
-      <main className="container pt-5">
-        <Switch>
-          <Route path="/customers" component={CustomersPage} />
-          <Route path="/invoices" component={InvoicesPage} />
-          <Route path="/" component={HomePage} />
-        </Switch>
-      </main>
-    </HashRouter>
+    <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated }}>
+      <HashRouter>
+        <NavBarWithRouter />
+        <main className="container pt-5">
+          <Switch>
+            <Route path="/login" component={LoginPage} />
+            <PrivateRoute path="/customers" component={CustomersPage} />
+            <PrivateRoute path="/invoices" component={InvoicesPage} />
+            <Route path="/" component={HomePage} />
+          </Switch>
+        </main>
+      </HashRouter>
+    </AuthContext.Provider>
   );
 };
 
