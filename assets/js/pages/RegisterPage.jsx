@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Field from "../forms/Field";
 import { Link } from "react-router-dom";
 import Axios from "axios";
-import registerAPI from "../services/registerAPI";
+import RegisterAPI from "../services/RegisterAPI";
 
 const Register = ({ history }) => {
   const [user, setUser] = useState({
@@ -33,7 +33,7 @@ const Register = ({ history }) => {
     e.preventDefault();
 
     try {
-      await registerAPI.register(user);
+      await RegisterAPI.register(user);
       setErrors("");
       history.replace("/login");
     } catch (error) {
