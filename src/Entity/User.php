@@ -54,11 +54,18 @@ class User implements UserInterface
      * @ORM\Column(type="string")
      * @Assert\NotBlank(message="le password du user est obligatoire")
      * @Assert\Length(
-     *  min=8, minMessage="prenom entre 8 et 12 caracteres",
-     *  max=12, maxMessage="prenom entre 8 et 12 caracteres"
+     *  min=8, minMessage="prenom entre 8 et 255 caracteres",
+     *  max=255, maxMessage="prenom entre 8 et 255 caracteres"
      *  )
      */
     private $password;
+
+    /**
+     * @var string The hashed confirmed password
+     * 
+     * @Assert\IdenticalTo(propertyPath="password", message="la confirmation du mot de passe n'est pas valide")
+     */
+    private $passwordConfirm;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -213,7 +220,7 @@ class User implements UserInterface
 
         return $this;
     }
-    
+
     public function getLastName(): ?string
     {
         return $this->lastName;
@@ -222,6 +229,30 @@ class User implements UserInterface
     public function setLastName($lastName): self
     {
         $this->lastName = $lastName;
+
+        return $this;
+    }
+
+    /**
+     * Get the hashed confirmed password
+     *
+     * @return  string
+     */
+    public function getPasswordConfirm()
+    {
+        return $this->passwordConfirm;
+    }
+
+    /**
+     * Set the hashed confirmed password
+     *
+     * @param  string  $passwordConfirm  The hashed confirmed password
+     *
+     * @return  self
+     */
+    public function setPasswordConfirm(string $passwordConfirm)
+    {
+        $this->passwordConfirm = $passwordConfirm;
 
         return $this;
     }

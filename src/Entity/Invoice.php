@@ -37,7 +37,8 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
  *  },
  *  normalizationContext = {
  *     "groups" = {"invoices_read"}
- *  }
+ *  },
+ *  denormalizationContext={"disable_type_enforcement"=true}
  * )
  * @ApiFilter(SearchFilter::class, properties = {"id","chrono","customer.firstName"})
  * @ApiFilter(RangeFilter::class)
