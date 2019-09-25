@@ -3,6 +3,8 @@ import Pagination from "../composants/Pagination";
 import InvoicesAPI from "../services/InvoicesAPI";
 import Moment from "moment-js";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import TableLoader from "../loaders/TableLoader";
 
 const STATUS_CLASSES = {
   PAID: "success",
@@ -20,6 +22,7 @@ const InvoicesPage = props => {
   const [invoices, setInvoices] = useState([]);
   const [searchValue, setSearchValue] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [load, setLoad] = useState(true);
 
   /* classic variables */
   const itemsPerPage = 10;
@@ -36,9 +39,10 @@ const InvoicesPage = props => {
 
     try {
       await InvoicesAPI.delete(id);
+      toast.success("Suppression de la facture : réussie");
     } catch (error) {
       setInvoices(lastInvoices);
-      console.log(error.response);
+      toast.error("Suppression de la facture : échouée");
     }
   };
 
@@ -46,8 +50,9 @@ const InvoicesPage = props => {
     try {
       const data = await InvoicesAPI.findAll();
       setInvoices(data);
+      setLoad(false);
     } catch (error) {
-      console.log(error.response);
+      toast.error("Chargement des factures : échoué");
     }
   };
 
@@ -107,44 +112,47 @@ const InvoicesPage = props => {
             <th />
           </tr>
         </thead>
-        <tbody>
-          {paginatedInvoices.map(invoice => (
-            <tr key={invoice.id}>
-              <td>{invoice.id}</td>
-              <td>
-                <a href="#">
-                  {invoice.customer.firstName} {invoice.customer.lastName}
-                </a>
-              </td>
-              <td className="text-center">
-                <span
-                  className={`badge badge-${STATUS_CLASSES[invoice.status]}`}
-                >
-                  {STATUS_LABELS[invoice.status]}
-                </span>
-              </td>
-              <td className="text-center">{formatDate(invoice.sentAt)}</td>
-              <td className="text-center">
-                {invoice.amount.toLocaleString()} €
-              </td>
-              <td>
-                <Link
-                  to={"/invoices/" + invoice.id}
-                  className="btn btn-sm btn-primary mr-1"
-                >
-                  Editer
-                </Link>
-                <button
-                  onClick={() => handleDelete(invoice.id)}
-                  className="btn btn-sm btn-danger"
-                >
-                  Supprimer
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
+        {!load && (
+          <tbody>
+            {paginatedInvoices.map(invoice => (
+              <tr key={invoice.id}>
+                <td>{invoice.id}</td>
+                <td>
+                  <Link to={"customers/" + invoice.customer.id}>
+                    {invoice.customer.firstName} {invoice.customer.lastName}
+                  </Link>
+                </td>
+                <td className="text-center">
+                  <span
+                    className={`badge badge-${STATUS_CLASSES[invoice.status]}`}
+                  >
+                    {STATUS_LABELS[invoice.status]}
+                  </span>
+                </td>
+                <td className="text-center">{formatDate(invoice.sentAt)}</td>
+                <td className="text-center">
+                  {invoice.amount.toLocaleString()} €
+                </td>
+                <td>
+                  <Link
+                    to={"/invoices/" + invoice.id}
+                    className="btn btn-sm btn-primary mr-1"
+                  >
+                    Editer
+                  </Link>
+                  <button
+                    onClick={() => handleDelete(invoice.id)}
+                    className="btn btn-sm btn-danger"
+                  >
+                    Supprimer
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        )}
       </table>
+      {load && <TableLoader />}
       {filteredInvoices.length > itemsPerPage && (
         <Pagination
           currentPage={currentPage}

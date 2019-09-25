@@ -3,6 +3,7 @@ import Field from "../forms/Field";
 import { Link } from "react-router-dom";
 import Axios from "axios";
 import RegisterAPI from "../services/RegisterAPI";
+import { toast } from "react-toastify";
 
 const Register = ({ history }) => {
   const [user, setUser] = useState({
@@ -35,6 +36,7 @@ const Register = ({ history }) => {
     try {
       await RegisterAPI.register(user);
       setErrors("");
+      toast.success("Inscription : réussie");
       history.replace("/login");
     } catch (error) {
       const { violations } = error.response.data;
@@ -43,6 +45,7 @@ const Register = ({ history }) => {
         violations.forEach(({ propertyPath, message }) => {
           apiErrors[propertyPath] = message;
         });
+        toast.error("Inscription : échouée");
         setErrors(apiErrors);
       }
     }

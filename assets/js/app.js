@@ -19,6 +19,8 @@ import PrivateRoute from "./composants/PrivateRoute";
 import AuthAPI from "./services/AuthAPI";
 import AuthContext from "./contexts/AuthContext";
 import RegisterPage from "./pages/RegisterPage";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 // any CSS you require will output into a single css file (app.css in this case)
 require("../css/app.css");
@@ -53,6 +55,11 @@ const App = () => {
           </Switch>
         </main>
       </HashRouter>
+      <ToastContainer
+        position={toast.POSITION.BOTTOM_LEFT}
+        autoClose={3000}
+        hideProgressBar={true}
+      />
     </AuthContext.Provider>
   );
 };

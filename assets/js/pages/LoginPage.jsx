@@ -2,6 +2,7 @@ import React, { useState, useContext } from "react";
 import authAPI from "../services/AuthAPI";
 import AuthContext from "../contexts/AuthContext";
 import Field from "../forms/Field";
+import { toast } from "react-toastify";
 
 const LoginPage = ({ history }) => {
   const { setIsAuthenticated } = useContext(AuthContext);
@@ -24,10 +25,11 @@ const LoginPage = ({ history }) => {
       await authAPI.authenticate(credentials);
       setError("");
       setIsAuthenticated(true);
+      toast.success("Connexion : réussie");
       history.replace("/customers");
     } catch (error) {
-      console.log(error.response);
       setError("Aucun compte a ce mail ou informations non valide");
+      toast.error("Connexion : echouée");
     }
   };
 
