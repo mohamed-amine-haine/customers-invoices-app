@@ -110,4 +110,4 @@ const Register = ({ history }) => {
   );
 };
 
-export default Register;
+export default RegisterPage;
