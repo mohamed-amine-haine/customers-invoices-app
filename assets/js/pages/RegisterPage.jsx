@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import Field from "../forms/Field";
 import { Link } from "react-router-dom";
-import Axios from "axios";
 import RegisterAPI from "../services/RegisterAPI";
 import { toast } from "react-toastify";
 
