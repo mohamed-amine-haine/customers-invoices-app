@@ -112,7 +112,6 @@ const invoicePage = ({ history, match }) => {
 
   return (
     <>
-      {console.log(load)}
       {(!edit && <h2>Création d'une facture</h2>) || (
         <h2>modfication d'une facture</h2>
       )}

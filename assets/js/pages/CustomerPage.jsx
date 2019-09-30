@@ -68,7 +68,6 @@ const CustomerPage = ({ match, history }) => {
         history.replace("/customers");
       }
     } catch ({ response }) {
-      console.log(response);
       const { violations } = response.data;
       if (violations) {
         const apiErrors = {};

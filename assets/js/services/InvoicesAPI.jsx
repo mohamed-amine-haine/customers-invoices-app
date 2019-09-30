@@ -8,9 +8,7 @@ function findAll() {
 }
 
 function deleteInvoice(id) {
-  return Axios.delete(INVOICES_API + "/" + id).then(response =>
-    console.log("ok")
-  );
+  return Axios.delete(INVOICES_API + "/" + id);
 }
 
 function create(invoice) {
