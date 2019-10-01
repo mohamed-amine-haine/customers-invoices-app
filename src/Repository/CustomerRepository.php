@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Customer;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * @method Customer|null find($id, $lockMode = null, $lockVersion = null)
@@ -14,9 +15,26 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  */
 class CustomerRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private $security;
+
+    public function __construct(ManagerRegistry $registry, Security $security)
     {
         parent::__construct($registry, Customer::class);
+        $this->security = $security;
+    }
+
+    public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+    {
+        return $this->createQueryBuilder('c')
+            ->join('c.user', 'u')
+            ->andWhere('u = :val1')
+            ->setParameter('val1', $this->security->getUser())
+            ->andWhere('c.email = :val2')
+            ->setParameter('val2', $criteria["email"])
+            ->orderBy('c.id', 'ASC')
+            ->setMaxResults(10)
+            ->getQuery()
+            ->getResult();
     }
 
     // /**

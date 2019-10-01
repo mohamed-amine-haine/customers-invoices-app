@@ -11,9 +11,11 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use Symfony\Component\Serializer\Annotation\Groups;
 use ApiPlatform\Core\Annotation\ApiSubresource;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\CustomerRepository")
+ * @UniqueEntity("email", message="Ce client existe deja")
  * @ApiResource(
  *  collectionOperations={"get","post"},
  *  itemOperations={"get","put","delete"},
@@ -24,6 +26,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     "groups" = {"customers_read"}
  * })
  * @ApiFilter(SearchFilter::class)
+ *
  */
 class Customer
 {
