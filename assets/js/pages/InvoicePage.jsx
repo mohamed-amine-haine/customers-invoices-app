@@ -6,6 +6,7 @@ import CustomersAPI from "../services/CustomersAPI";
 import InvoicesAPI from "../services/InvoicesAPI";
 import { toast } from "react-toastify";
 import FormLoader from "../loaders/FormLoader";
+import Cache from "../services/Cache";
 
 const invoicePage = ({ history, match }) => {
   const { id = "new" } = match.params;
@@ -83,16 +84,14 @@ const invoicePage = ({ history, match }) => {
     event.preventDefault();
 
     try {
-      const validatedInvoice = {
-        ...invoice
-        //amount: parseFloat(invoice.amount) || undefined
-      };
       if (edit) {
-        await InvoicesAPI.update(id, validatedInvoice);
+        await InvoicesAPI.update(id, invoice);
         toast.success("Modification de la facture : réussi");
+        Cache.clear();
       } else {
-        await InvoicesAPI.create(validatedInvoice);
+        await InvoicesAPI.create(invoice);
         toast.success("Création de la facture : réussi");
+        Cache.clear();
         history.replace("/invoices");
       }
     } catch (error) {

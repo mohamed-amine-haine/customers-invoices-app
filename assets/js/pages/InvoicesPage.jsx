@@ -5,6 +5,7 @@ import Moment from "moment-js";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import TableLoader from "../loaders/TableLoader";
+import Cache from "../services/Cache";
 
 const STATUS_CLASSES = {
   PAID: "success",
@@ -40,6 +41,7 @@ const InvoicesPage = props => {
     try {
       await InvoicesAPI.delete(id);
       toast.success("Suppression de la facture : réussie");
+      Cache.clear();
     } catch (error) {
       setInvoices(lastInvoices);
       toast.error("Suppression de la facture : échouée");
