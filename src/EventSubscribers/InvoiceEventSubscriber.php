@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace App\EventSubscribers;
 
@@ -35,7 +35,10 @@ class InvoiceEventSubscriber implements EventSubscriberInterface
   public static function getSubscribedEvents()
   {
     return [
-      KernelEvents::VIEW => ['setChronoForInvoice', EventPriorities::PRE_VALIDATE]
+      KernelEvents::VIEW => [
+        ['setChronoForInvoice', EventPriorities::PRE_VALIDATE],
+        ['setAmountForInvoice', EventPriorities::POST_VALIDATE]
+      ]
     ];
   }
 
@@ -44,18 +47,22 @@ class InvoiceEventSubscriber implements EventSubscriberInterface
     $invoice = $viewEvent->getControllerResult();
     $method = $viewEvent->getRequest()->getMethod();
 
-    if($invoice instanceof Invoice && $method == 'POST')
-    {
+    if ($invoice instanceof Invoice && $method == 'POST') {
       $chrono = $this->invoiceRepository->findNextChrono($this->security->getUser());
       $invoice->setChrono($chrono);
 
-      if(empty($invoice->getSentAt()))
-      {
+      if (empty($invoice->getSentAt())) {
         $invoice->setSentAt(new \DateTime());
       }
-
     }
   }
-  
-}
 
+  public function setAmountForInvoice(ViewEvent $viewEvent)
+  {
+    $invoice = $viewEvent->getControllerResult();
+    $method = $viewEvent->getRequest()->getMethod();
+    if ($invoice instanceof Invoice && ($method == 'POST' || $method == "PUT")) {
+      $invoice->setAmount(round($invoice->getAmount(), 2));
+    }
+  }
+}

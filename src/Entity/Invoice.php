@@ -59,6 +59,7 @@ class Invoice
      * @Groups({"invoices_read", "customers_read", "invoices_subresource_read"})
      * @Assert\NotBlank(message="le amount est obligatoire")
      * @Assert\Type(type="numeric", message="le amount doit etre numerique")
+     * @Assert\PositiveOrZero(message="le amount doit etre positif ou zero")
      */
     private $amount;
 
