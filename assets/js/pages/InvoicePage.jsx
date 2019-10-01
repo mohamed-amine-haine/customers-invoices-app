@@ -87,6 +87,7 @@ const invoicePage = ({ history, match }) => {
       if (edit) {
         await InvoicesAPI.update(id, invoice);
         toast.success("Modification de la facture : réussi");
+        setErrors("");
         Cache.clear();
       } else {
         await InvoicesAPI.create(invoice);

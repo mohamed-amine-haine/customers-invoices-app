@@ -60,8 +60,8 @@ const CustomerPage = ({ match, history }) => {
     try {
       if (edit) {
         await CustomersAPI.update(id, customer);
-        setErrors("");
         toast.success("Modification du client : réussi");
+        setErrors("");
       } else {
         await CustomersAPI.create(customer);
         toast.success("Création du client : réussi");
